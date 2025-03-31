@@ -207,17 +207,24 @@ function openQuantityModal(productId, productName, productImg, originalPrice, di
 }
 
 // Để tránh mất event listener, tạo một hàm bọc cho handleConfirmBuy
-function handleConfirmBuyWrapper(event) {
-    const productId = event.target.getAttribute("data-product-id");
-    handleConfirmBuy(productId);
-}
-
 function handleConfirmBuy(productId) {
     console.log("✅ Nút xác nhận đã được bấm!");
+    
+    // Kiểm tra xem người dùng đã đăng nhập chưa
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+        console.log("⚠️ Người dùng chưa đăng nhập. Hiển thị popup yêu cầu đăng nhập.");
+        
+        // Hiển thị popup yêu cầu đăng nhập và không gửi request đến API
+        displayNotification("❌ Bạn cần đăng nhập để thực hiện thao tác này!", "error");
+        showLoginPopup();  // Hiển thị popup đăng nhập
+        return; // Dừng lại và không gửi request
+    }
+
     const quantity = parseInt(document.getElementById("modal-quantity").value);
 
     if (quantity < 1) {
-        console.log("⚠ Số lượng không hợp lệ!");
+        console.log("⚠️ Số lượng không hợp lệ!");
         return;
     }
 
@@ -227,7 +234,7 @@ function handleConfirmBuy(productId) {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": "Bearer " + localStorage.getItem("access_token")
+            "Authorization": "Bearer " + token
         },
         body: JSON.stringify({ san_pham_id: productId, so_luong: quantity }),
     })
@@ -312,4 +319,50 @@ function displayNotification(message, type) {
             notification.remove();
         }, 500);
     }, 2000);
+}
+// Hiển thị popup yêu cầu đăng nhập
+function showLoginPopup() {
+    // Overlay nền mờ
+    const overlay = document.createElement("div");
+    overlay.style.position = "fixed";
+    overlay.style.top = "0";
+    overlay.style.left = "0";
+    overlay.style.width = "100%";
+    overlay.style.height = "100%";
+    overlay.style.backgroundColor = "rgba(0, 0, 0, 0.4)";
+    overlay.style.zIndex = "999";
+
+    // Popup đăng nhập
+    const loginPopup = document.createElement("div");
+    loginPopup.classList.add("login-popup");
+    loginPopup.style.position = "fixed";
+    loginPopup.style.top = "50%";
+    loginPopup.style.left = "50%";
+    loginPopup.style.transform = "translate(-50%, -50%)";
+    loginPopup.style.padding = "20px";
+    loginPopup.style.background = "white";
+    loginPopup.style.borderRadius = "10px";
+    loginPopup.style.boxShadow = "0 5px 15px rgba(0,0,0,0.3)";
+    loginPopup.style.zIndex = "1000";
+    loginPopup.innerHTML = `
+        <p><strong>Bạn cần đăng nhập để thực hiện thao tác này.</strong></p>
+        <button id="login-btn" style="margin-right: 10px;">Đăng nhập</button>
+        <button id="cancel-btn">Hủy</button>
+    `;
+
+    document.body.appendChild(overlay);
+    document.body.appendChild(loginPopup);
+
+    // Nút "Đăng nhập"
+    document.getElementById("login-btn").addEventListener("click", function () {
+        console.log("Chuyển hướng đến trang đăng nhập");
+        window.location.href = "/login/"; // Đưa người dùng đến trang đăng nhập
+    });
+
+    // Nút "Hủy"
+    document.getElementById("cancel-btn").addEventListener("click", function () {
+        console.log("Đóng popup");
+        overlay.remove();
+        loginPopup.remove();
+    });
 }

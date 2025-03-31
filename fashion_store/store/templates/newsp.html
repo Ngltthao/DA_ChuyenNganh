@@ -170,17 +170,20 @@ a.nav-item.nav-link.bestsales {
 /* Bố cục sản phẩm */
 .product-options {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 15px;
     margin: 10px 0;
 }
 
 .product-option {
     text-align: center;
-    padding: 10px;
+    padding: 15px;
     border-radius: 8px;
     background: #f9f9f9;
     transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 .product-option:hover {
     transform: scale(1.05);
@@ -188,8 +191,8 @@ a.nav-item.nav-link.bestsales {
 
 /* Ảnh sản phẩm */
 .modal-img {
-    width: 100%;
-    max-width: 300px;
+    width: 80%;
+    max-width: 250px;
     height: auto;
     border-radius: 5px;
 }
@@ -199,75 +202,50 @@ a.nav-item.nav-link.bestsales {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 20px;
+    gap: 10px;
     margin-top: 10px;
 }
 
 .quantity-input {
-    width: 75px;
+    width: 60px;
     text-align: center;
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 5px;
-    font-size: 20px;
+    font-size: 18px;
 }
 
-/* Nút bấm */
-button {
-    padding: 10px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background 0.2s;
-}
-button:hover {
-    opacity: 0.8;
-}
-
+/* Nút tăng giảm */
 .decrease, .increase {
-    width: 35px; /* Tăng kích thước */
+    width: 35px;
     height: 35px;
     background: #ddd;
     border-radius: 50%;
     font-size: 18px;
-    display: flex; /* Căn giữa dấu + và - */
+    display: flex;
     align-items: center;
     justify-content: center;
     border: none;
     cursor: pointer;
     transition: all 0.2s ease;
 }
-
 .decrease:hover, .increase:hover {
-    background: #bbb; /* Màu hover */
+    background: #bbb;
 }
-
 .decrease:active, .increase:active {
-    transform: scale(0.9); /* Hiệu ứng khi bấm */
+    transform: scale(0.9);
 }
-
 
 /* Nút xác nhận */
 #confirmPurchase {
     background: #f12a47;
     color: white;
     font-weight: bold;
-    width: 70%;
-    font-size: 20px;
-    margin: auto;
-    border-radius: 15px;
-}
-
-/* Nút hủy */
-#cancelPurchase {
-    background: #ccc;
-    color: black;
-    font-weight: bold;
-    width: 100%;
-    width: 70%;
-    font-size: 20px;
+    width: 60%;
+    font-size: 18px;
     margin: 10px auto;
-    border-radius: 15px;
+    border-radius: 10px;
+    padding: 10px;
 }
 
 /* Responsive */
@@ -280,42 +258,56 @@ button:hover {
         grid-template-columns: repeat(1, 1fr);
     }
 }
-
-.product-options {
-    display: flex;
-    justify-content: space-around;
-    margin: 10px 0;
-}
-.product-option {
+.login-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 25px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
     text-align: center;
-    width: 50%;
+    border-radius: 12px;
+    width: 450px; /* Giữ kích thước cố định */
+    max-width: 90%;
+
+    height: auto;
+    min-height: 200px;
 }
 
-.quantity-selection {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    margin: 10px 0;
+.login-popup p {
+    font-size: 16px;
+    margin-bottom: 20px;
+    font-weight: 500;
 }
-.quantity-input {
-    width: 60px;
-    text-align: center;
-}
-button {
-    padding: 10px;
+
+.login-popup button {
+    width: 120px;
+    padding: 12px;
+    margin: 10px;
     border: none;
     cursor: pointer;
+    font-size: 14px;
+    border-radius: 6px;
+    transition: 0.3s;
 }
 
-.row {
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-    flex-wrap: nowrap;
-    margin-right: -15px;
-    margin-left: -15px;
-    flex-direction: row;
+#login-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+#login-btn:hover {
+    background-color: #218838;
+}
+
+#cancel-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+#cancel-btn:hover {
+    background-color: #c82333;
 }
 
 </style>
@@ -343,7 +335,7 @@ button {
 										<strong style="color: #f12a47;">${{ product.get_final_price }}</strong>
 									</div>
 								</div>
-								<button class="seemore_bt">Mua ngay</button>
+								<button class="seemore_bt" data-product-id="{{ product.id }}">Mua ngay</button>
 							</div>
 						{% else %}
 							<!-- Sản phẩm có giảm giá lớn thứ hai -->
@@ -358,114 +350,148 @@ button {
 										<strong style="color: #f12a47;">${{ product.get_final_price }}</strong>
 									</div>
 								</div>
+                                <button class="seemore_bt" data-product-id="{{ product.id }}">Mua ngay</button>
 							</div>
 						{% endif %}
 					{% endfor %}
 				</div>
 			</div>			
     	</div>
-    </div><div id="purchaseModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2 style="font-size: 25px; font-weight: bolder;">Chọn sản phẩm và số lượng</h2>
-    
-            <div class="product-options">
-                {% for product in top_discount_products %}
-                <div class="product-option">
-                    <label>
-                        <input type="checkbox" class="product-checkbox" value="{{ product.id }}" data-name="{{ product.ten_san_pham }}">
-                        <img src="{{ product.hinh_anh }}" alt="{{ product.ten_san_pham }}" class="modal-img">
-                        <p style="font-size: 25px;font-weight: 500;">{{ product.ten_san_pham }}</p>
-                        <p><strong style="color: #f12a47; font-size: 25px;">${{ product.get_final_price }}</strong></p>
-                    </label>
-    
-                    <div class="quantity-selection">
-                        <button class="decrease" disabled>-</button>
-                        <input type="number" class="quantity-input" value="1" min="1">
-                        <button class="increase">+</button>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-    
-            <button id="confirmPurchase">Xác nhận</button>
-            <button id="cancelPurchase">Hủy</button>
-        </div>
     </div>
     
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    let modal = document.getElementById("purchaseModal");
-    let closeBtn = document.querySelector(".close");
-    let confirmBtn = document.getElementById("confirmPurchase");
-
-    // Mở modal khi nhấn "Mua ngay"
+document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".seemore_bt").forEach(button => {
-        button.addEventListener("click", function() {
-            modal.style.display = "block";
+        button.addEventListener("click", async function () {
+            const token = localStorage.getItem("access_token");
+
+            if (!token) {
+                console.log("Người dùng chưa đăng nhập, hiển thị popup");
+                showLoginPopup();
+                return;
+            }
+
+            const productId = this.getAttribute("data-product-id");
+            if (!productId) {
+                showNotification("⚠️ Không tìm thấy ID sản phẩm!", "error");
+                return;
+            }
+
+            console.log("📌 Product ID:", productId);
+
+            try {
+                const response = await fetch("/api/cart/add/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        san_pham_id: productId, 
+                        so_luong: 1
+                    })
+                });
+
+                const data = await response.json();
+                console.log("📤 Response từ server:", response.status, data);
+
+                if (response.status === 201) {
+                    showNotification("✅ Sản phẩm đã được thêm vào giỏ hàng!", "success");
+                } else {
+                    showNotification("⚠️ Lỗi: " + (data.error || "Không thể thêm sản phẩm."), "error");
+                }
+            } catch (error) {
+                console.error("❌ Lỗi kết nối:", error);
+                showNotification("❌ Lỗi kết nối! Vui lòng thử lại.", "error");
+            }
         });
-    });
-
-    // Đóng modal khi nhấn nút đóng hoặc hủy
-    closeBtn.onclick = function() {
-        modal.style.display = "none";
-    };
-    document.getElementById("cancelPurchase").onclick = function() {
-        modal.style.display = "none";
-    };
-
-    // Xác nhận sản phẩm đã chọn
-    confirmBtn.addEventListener("click", function() {
-        let selectedProducts = [];
-        let token = localStorage.getItem("access_token"); // Lấy token từ localStorage
-
-        if (!token) {
-            alert("⚠️ Bạn chưa đăng nhập! Vui lòng đăng nhập để tiếp tục.");
-            return;
-        }
-
-        document.querySelectorAll(".product-checkbox:checked").forEach(checkbox => {
-            let productId = checkbox.value;
-            let quantity = checkbox.closest(".product-option").querySelector(".quantity-input").value;
-
-            selectedProducts.push({ product_id: productId, quantity: parseInt(quantity) });
-        });
-
-        if (selectedProducts.length === 0) {
-            alert("⚠️ Vui lòng chọn ít nhất một sản phẩm!");
-            return;
-        }
-
-        // Gửi dữ liệu đến Django API (hỗ trợ JWT)
-        fetch("/api/cart/add/", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + token
-    },
-    body: JSON.stringify({ products: selectedProducts })
-})
-.then(response => response.json().then(data => ({ status: response.status, body: data }))) // ✅ Log cả status code và response
-.then(({ status, body }) => {
-    console.log("📤 Response từ server:", status, body);
-
-    if (status === 400) {
-        alert("⚠️ Lỗi 400: " + (body.error || "Yêu cầu không hợp lệ."));
-    } else if (status === 401) {
-        alert("⚠️ Bạn chưa đăng nhập!");
-        window.location.href = "/login";
-    } else if (body.success) {
-        alert("🛒 Sản phẩm đã được thêm vào giỏ hàng!");
-        modal.style.display = "none";
-    } else {
-        alert("⚠️ Đã xảy ra lỗi: " + (body.message || "Lỗi không xác định."));
-    }
-})
-.catch(error => console.error("❌ Lỗi:", error));
-
     });
 });
+
+// Hàm hiển thị thông báo
+function showNotification(message, type) {
+    const notification = document.createElement("div");
+    notification.classList.add("notification");
+    notification.textContent = message;
+    
+    // Thêm kiểu cho thông báo tùy theo loại (success, error)
+    notification.style.position = "fixed";
+    notification.style.top = "10px";
+    notification.style.right = "10px";  // Di chuyển thông báo sang góc phải
+    notification.style.padding = "10px 20px";
+    notification.style.backgroundColor = type === "success" ? "#28a745" : "#dc3545";
+    notification.style.color = "white";
+    notification.style.borderRadius = "5px";
+    notification.style.fontSize = "14px";
+    notification.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)";
+    notification.style.zIndex = "1001";
+    notification.style.opacity = "0";
+    notification.style.transition = "opacity 0.5s";
+
+    document.body.appendChild(notification);
+
+    // Hiển thị thông báo
+    setTimeout(() => {
+        notification.style.opacity = "1";
+    }, 100);
+
+    // Ẩn thông báo sau 3 giây
+    setTimeout(() => {
+        notification.style.opacity = "0";
+        setTimeout(() => {
+            notification.remove();
+        }, 500);
+    }, 3000);
+}
+
+// 🛑 Hiển thị popup yêu cầu đăng nhập
+function showLoginPopup() {
+    // Overlay nền mờ
+    const overlay = document.createElement("div");
+    overlay.style.position = "fixed";
+    overlay.style.top = "0";
+    overlay.style.left = "0";
+    overlay.style.width = "100%";
+    overlay.style.height = "100%";
+    overlay.style.backgroundColor = "rgba(0, 0, 0, 0.4)";
+    overlay.style.zIndex = "999";
+
+    // Popup đăng nhập
+    const loginPopup = document.createElement("div");
+    loginPopup.classList.add("login-popup");
+    loginPopup.style.position = "fixed";
+    loginPopup.style.top = "50%";
+    loginPopup.style.left = "50%";
+    loginPopup.style.transform = "translate(-50%, -50%)";
+    loginPopup.style.padding = "20px";
+    loginPopup.style.background = "white";
+    loginPopup.style.borderRadius = "10px";
+    loginPopup.style.boxShadow = "0 5px 15px rgba(0,0,0,0.3)";
+    loginPopup.style.zIndex = "1000";
+    loginPopup.innerHTML = `
+        <p><strong>Bạn cần đăng nhập để mua hàng.</strong></p>
+        <button id="login-btn" style="margin-right: 10px;">Đăng nhập</button>
+        <button id="cancel-btn">Hủy</button>
+    `;
+
+    document.body.appendChild(overlay);
+    document.body.appendChild(loginPopup);
+
+    // Nút "Đăng nhập"
+    document.getElementById("login-btn").addEventListener("click", function () {
+        console.log("Chuyển hướng đến trang đăng nhập");
+        window.location.href = "/login/";
+    });
+
+    // Nút "Hủy"
+    document.getElementById("cancel-btn").addEventListener("click", function () {
+        console.log("Đóng popup");
+        overlay.remove();
+        loginPopup.remove();
+    });
+}
+
 	</script>
 	
 {% endblock %}

@@ -325,6 +325,59 @@ a.nav-item.nav-link.sanpham {
     font-weight: bolder;
     text-decoration: underline !important;
 }
+
+.login-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 25px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    border-radius: 12px;
+    width: 450px; /* Giữ kích thước cố định */
+    max-width: 90%;
+
+    height: auto;
+    min-height: 200px;
+}
+
+.login-popup p {
+    font-size: 16px;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.login-popup button {
+    width: 120px;
+    padding: 12px;
+    margin: 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+#login-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+#login-btn:hover {
+    background-color: #218838;
+}
+
+#cancel-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+#cancel-btn:hover {
+    background-color: #c82333;
+}
+
 </style>
 <div class="collection_text" style="margin-top: 1%; padding: 20px 0;">Sản Phẩm</div>
 <div style="background-color: #ffffff; padding-top: 20px; margin-top: 3%;">
