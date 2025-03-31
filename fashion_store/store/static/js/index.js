@@ -1,6 +1,8 @@
 let displayedProducts = 6; // Số sản phẩm hiển thị ban đầu
 let allProducts = []; // Lưu toàn bộ sản phẩm
+
 async function fetchProducts() {
+  const formattedPrice = (bestDiscountProduct.gia_sau_giam || 0).toLocaleString();
   try {
       const response = await fetch("/api/products/");
       const products = await response.json();
@@ -53,7 +55,6 @@ async function fetchProducts() {
               </div>
           `;
 
-
           carouselList.appendChild(productCard);
 
           // Tạo indicator
@@ -80,7 +81,7 @@ async function fetchProducts() {
                         <div class="dolar_text">
                             <strong style="color:rgb(92, 92, 92); text-decoration: line-through;">${product.gia || "0"}.đ</strong>
                             <strong style="color:red;">-${product.giam_gia || "0"}%</strong>
-                            <br>=><strong style="color: #f12a47; font-size: 30px;">${product.gia_sau_giam || "0"}.đ</strong>
+                            <br>=><strong style="color: #f12a47; font-size: 30px;">${formattedPrice || "0"}.đ</strong>
                         </div>
                     </div>
                     <button class="seemore_bt">See More</button>
@@ -106,12 +107,11 @@ async function fetchProducts() {
                     <strong>Sale <br><span style="color: #0a0506;">${bestDiscountProduct.ten_san_pham}</span> <br>SHOES</strong>
                 </div>
                 <div class="number_text">
-                    <strong><span style="color: #0a0506">${bestDiscountProduct.gia_sau_giam || "0"}.đ</span></strong>
+                    <strong><span style="color: #0a0506">${formattedPrice}.đ</span></strong>
                 </div>
-                <button class="seemore">See More</button>
+                <button class="seemore"><a href="{% url 'best_sales' %}">Xem thêm</a></button>
             </div>
         `;
-
 
     // Sắp xếp sản phẩm theo số lượng tồn kho giảm dần và lấy 6 sản phẩm đầu tiên
     const topProducts = products.sort((a, b) => b.so_luong_ton - a.so_luong_ton).slice(0, 6);
@@ -127,8 +127,8 @@ async function fetchProducts() {
                     <div class="shoes_icon">
                         <img src="${product.hinh_anh || 'images/default.png'}" alt="${product.ten_san_pham}" style="height: 280px; !important;>
                     </div>
-                        <strong style="color:rgb(92, 92, 92); text-decoration: line-through; ">${product.gia || "0"}.đ</strong>
-                        <div class="shoes_price">Giá còn : <span style="color: #ff4e5b; font-weight: bolder;">${product.gia_sau_giam || product.gia}.đ</span></div>
+                        <strong style="color:rgb(92, 92, 92); text-decoration: line-through; font-size:15px; ">${product.gia || "0"}.đ</strong>
+                        <div class="shoes_price">Giá còn : <span style="color: #ff4e5b; font-weight: bolder;">${formattedPrice || product.gia}.đ</span></div>
                     </div>
                 </div>
             </div>  
