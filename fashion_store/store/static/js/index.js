@@ -44,7 +44,7 @@ async function fetchProducts() {
                   </div>
                   <div class="col-sm-5">
                       <div class="shoes_img">
-                          <img src="${product.hinh_anh || "images/default.png"}" alt="${product.ten_san_pham}" style="height: 600px;">
+                          <img src="${product.hinh_anh || "images/default.png"}" alt="${product.ten_san_pham}" style="height: 740px;">
                       </div>
                   </div>
               </div>
