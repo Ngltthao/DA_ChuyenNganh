@@ -54,8 +54,7 @@ def contact_view(request):
 
 def sales_view(request):
     top_discount_products = Product.objects.order_by('-giam_gia')[:2]
-    print("🔍 Dữ liệu sản phẩm:", top_discount_products)  # Debug
-
+    print("🔍 Dữ liệu sản phẩm:", top_discount_products) 
     return render(request, 'newsp.html', {'top_discount_products': top_discount_products})
 
 

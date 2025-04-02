@@ -22,7 +22,6 @@ async function fetchProducts() {
           console.error("❌ Không tìm thấy phần tử Carousel_list hoặc carousel-indicators.");
           return;
       }
-
       carouselList.innerHTML = "";
       carouselIndicators.innerHTML = "";
 
@@ -32,7 +31,6 @@ async function fetchProducts() {
           const productCard = document.createElement("div");
           productCard.classList.add("carousel-item");
           if (index === 0) productCard.classList.add("active");
-
           productCard.innerHTML = `
               <div class="row">
                   <div class="col-sm-5">
@@ -42,7 +40,6 @@ async function fetchProducts() {
                           <p class="lorem_text" style="font-size: 20px;">${product.mo_ta || "Mô tả sản phẩm."}</p>
                           <button class="buy_bt">Mua ngay</button>
                           <button class="more_bt"> <a href="${productAllUrl}" >Xem thêm</a></button>
-                         
                       </div>
                   </div>
                   <div class="col-sm-5">
@@ -52,10 +49,7 @@ async function fetchProducts() {
                   </div>
               </div>
           `;
-
-
           carouselList.appendChild(productCard);
-
           // Tạo indicator
           const indicator = document.createElement("li");
           indicator.setAttribute("data-bs-target", "#myCarousel");
@@ -111,14 +105,10 @@ async function fetchProducts() {
                 <button class="seemore">See More</button>
             </div>
         `;
-
-
     // Sắp xếp sản phẩm theo số lượng tồn kho giảm dần và lấy 6 sản phẩm đầu tiên
     const topProducts = products.sort((a, b) => b.so_luong_ton - a.so_luong_ton).slice(0, 6);
-
     const productContainer = document.getElementById("productall");
     productContainer.innerHTML = ""; // Xóa nội dung cũ
-
     topProducts.forEach(product => {
         const productHTML = `
             <div class="col-sm-4">
